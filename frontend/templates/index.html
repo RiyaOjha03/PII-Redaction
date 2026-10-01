@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SecurePDF - Axios Upload</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    
+    }
+
+    html, body {
+      height: 100%;
+    
+      font-family: 'Poppins', sans-serif;
+      background-color: transparent;
+      color: white;
+    }
+
+    #spaceCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .subtitle {
+      font-size: 24px;
+      margin-bottom: 40px;
+      color: #ccc;
+    }
+
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .product-card {
+      width: 220px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s, background 0.3s;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: scale(1.1) rotateY(10deg);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .product-title {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .product-price {
+      color: #00ffea;
+      font-size: 20px;
+    }
+
+
+
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+    /*  background: url('https://images.unsplash.com/photo-1524661135-423995f22d0f?auto=format&fit=crop&w=1740&q=80') no-repeat center center fixed;  
+      background-size: cover; */
+      color: #fff;
+    }
+
+   
+
+    nav {
+      backdrop-filter: blur(12px);
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    #toggleDark {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin: 1rem;
+      font-size: 1.1rem;
+      color: #f3f3f3;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      margin: 2rem;
+      border-radius: 1rem;
+     
+      background-color: rgba(255, 255, 255, 0.00); /* Transparent background */
+      backdrop-filter: blur(0px); /* Frosted glass effect */
+      box-shadow: 0px 8px 32px 0 rgba(31, 38, 135, 0.37);   
+     box-shadow: 
+  0 0 15px rgba(45, 26, 252, 0.4),
+  0 0 30px rgba(45, 26, 252, 0.4),
+  0 0 45px rgba(45, 26, 252, 0.4);
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .btn {
+      padding: 0.7rem 1.5rem;
+      margin: 0.5rem;
+      font-weight: bold;
+      border-radius: 10px;
+      border: 2px solid #fff;
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      backdrop-filter: blur(8px);
+      box-shadow: 
+  0 0 10px rgba(45, 26, 252, 0.4),
+  0 0 10px rgba(45, 26, 252, 0.4),
+  0 0 10px rgba(45, 26, 252, 0.4);
+    }
+
+    .btn:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+      box-shadow: 
+  0 0 20px rgba(252, 26, 218, 0.4),
+  0 0 20px rgba(252, 26, 218, 0.4),
+  0 0 20px rgba(252, 26, 218, 0.4);
+    }
+
+    .btn-blue {
+      border-color: #60a5fa;
+    }
+
+    .btn-green {
+      border-color: #4ade80;
+    }
+
+    #spinner {
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+
+    .hero-image img {
+      margin-top: 2rem;
+      width: 180px;
+      height: auto;
+      filter: drop-shadow(0 0 10px #fff);
+      transition: transform 0.3s ease;
+    }
+
+    .hero-image img:hover {
+      transform: scale(1.1);
+    }
+
+    #previewSection {
+      margin: 2rem;
+      padding: 1rem;
+      backdrop-filter: blur(14px);
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      display: none;
+    }
+
+    #previewSection h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    iframe {
+      width: 100%;
+      height: 500px;
+      border-radius: 8px;
+      border: none;
+      background-color: rgba(0,0,0,0.2);
+    }
+
+    #downloadBtn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      background-color: rgba(255,255,255,0.1);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      border: 2px solid #3b82f6;
+      transition: 0.3s;
+      backdrop-filter: blur(5px);
+    }
+
+    #downloadBtn:hover {
+      background-color: rgba(59,130,246,0.2);
+      transform: scale(1.05);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .half-preview-right {
+  width: 50vw; /* Half of viewport width */
+  height: 100vh; /* Full height */
+  position: fixed;
+  top: 0;
+  right: 0;
+  border: none;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1); /* Optional shadow */
+  z-index: 1000;
+}
+.main-container {
+  display: flex;
+  height: 100vh;
+}
+
+.left-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.right-preview {
+  width: 50%;
+  height: 100%;
+  background-color: #f9f9f9;
+}
+
+.pdf-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.bold-3d-text {
+      font-size: 4rem;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 
+        1px 1px 0 #000, 
+        2px 2px 0 #000, 
+        3px 3px 0 #000, 
+        4px 4px 0 #000;
+    }
+
+  </style>
+</head>
+
+
+
+
+
+<body>
+
+  <canvas id="spaceCanvas"></canvas>
+<div>
+    
+    <input type="file" id="files" name="files" accept="application/pdf" />
+
+    <nav>
+      <div class="logo">🔐 SecurePDF</div>
+      <button id="toggleDark">🌗 Toggle Dark Mode</button>
+    </nav>
+  
+    <div class="content">
+      <h1 class="title bold-3d-text">One Click Zero Leak</h1>
+      <p class="subtitle">SecurePDF - PII Detection</p>
+      <div class="products" id="productsContainer">
+        <!-- Products will appear here dynamically -->
+      </div>
+    </div>
+    
+
+    <div class="subtitle">Protecting your privacy, one PDF at a time.</div>
+  
+    <section class="hero bg-blue-50 font-sans">
+      <h1 class="text-4xl md:text-5xl font-bold leading-tight">Redact Sensitive Information Instantly</h1>
+      <p class=" text-lg">Upload your PDF, we’ll take care of the privacy.</p>
+  
+      <form id="uploadForm">
+        <label for="files"  class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md flex items-center space-x-2" style="float: left; margin: 40px;">📂 Choose PDF</label>
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md flex items-center space-x-2" style="float: right; margin: 30px;">🚀 Upload PDF</button>
+      </form>
+  
+      <div id="spinner" style="display: none;">⏳ Uploading... Please wait.</div>
+  
+      <div class="hero-image">
+        <img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png" alt="shield" />
+      </div>
+    </section>
+  
+
+    <div class="main-container">
+      <div class="left-content">
+        <section class="px-8 py-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Feature Cards -->
+          <div class="bg-transparent dark:bg-transparent-800 rounded-xl shadow p-6 flex items-start space-x-4 transition-all duration-300">
+            <div class="text-3xl">🔍</div>
+            <div>
+              <h3 class="font-bold text-lg text-blue-900 dark:text-white">Automatic Detection</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">Find PII like names, addresses, and more.</p>
+            </div>
+          </div>
+          <div class="bg-transparent dark:bg-transparent-800 rounded-xl shadow p-6 flex items-start space-x-4">
+            <div class="text-3xl">🖼</div>
+            <div>
+              <h3 class="font-bold text-lg text-blue-900 dark:text-white">Preview & Download</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">Helps meet privacy regulations.</p>
+            </div>
+          </div>
+          <div class="bg-transparent dark:bg-transparent-800 rounded-xl shadow p-6 flex items-start space-x-4">
+            <div class="text-3xl">🌐</div>
+            <div>
+              <h3 class="font-bold text-lg text-blue-900 dark:text-white">Multi-Language Support</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">Redact personal data in multiple languages.</p>
+            </div>
+          </div>
+          <div class="bg-transparent dark:bg-transparent-800 rounded-xl shadow p-6 flex items-start space-x-4">
+            <div class="text-3xl">✂</div>
+            <div>
+              <h3 class="font-bold text-lg text-blue-900 dark:text-white">Custom Redaction</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">Select any area for redaction.</p>
+            </div>
+          </div>
+          <div class="bg-transparent dark:bg-transparent-800 rounded-xl shadow p-6 flex items-start space-x-4">
+            <div class="text-3xl">⚙</div>
+            <div>
+              <h3 class="font-bold text-lg text-blue-900 dark:text-white">Secure Processing</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">Your files are processed securely.</p>
+            </div>
+          </div>
+          <div class="bg-transparent dark:bg-transparent-800 rounded-xl shadow p-6 flex items-start space-x-4">
+            <div class="text-3xl">🚫</div>
+            <div>
+              <h3 class="font-bold text-lg text-blue-900 dark:text-white">No Data Storage</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">We never store your files.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="right-preview" id="previewSection">
+          <h2>📄 Redacted PDF Preview</h2>
+          <iframe id="pdfPreview" src="" class="half-preview-right"></iframe>
+          <a id="downloadBtn" href="#" download>⬇ Download Redacted PDF</a>
+      </div>
+    </div>
+    
+
+   
+   
+
+   
+
+
+</div>
+
+
+
+</body>
+
+
+
+  <script>
+
+
+
+document.getElementById('toggleDark').addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+    });
+
+    document.getElementById('uploadForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const fileInput = document.getElementById('files');
+      const files = fileInput.files;
+
+      if (!files.length) {
+        Swal.fire("⚠ No file selected!", "Please choose a PDF file to upload.", "warning");
+        return;
+      }
+
+      const file = files[0];
+
+      if (!file.name.endsWith('.pdf')) {
+        Swal.fire("❌ Invalid File!", "Only PDF files are allowed.", "error");
+        fileInput.value = "";
+        return;
+      }
+
+      if (file.size > 100 * 1024 * 1024) {
+        Swal.fire("📦 File too large!", "Maximum allowed size is 100MB.", "error");
+        fileInput.value = "";
+        return;
+      }
+
+      document.getElementById('spinner').style.display = 'block';
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      axios.post('http://127.0.0.1:5000/upload/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      .then(response => {
+        document.getElementById('spinner').style.display = 'none';
+        Swal.fire("✅ Done!", "PDF redacted successfully.", "success");
+
+        const { preview_url, download_url } = response.data;
+        document.getElementById('pdfPreview').src = preview_url;
+        document.getElementById('downloadBtn').href = download_url;
+        document.getElementById('previewSection').style.display = 'block';
+      })
+      .catch(error => {
+        document.getElementById('spinner').style.display = 'none';
+        Swal.fire("❌ Failed!", "Something went wrong during upload.", "error");
+        console.error(error);
+      });
+    });
+
+
+
+
+
+    const canvas = document.getElementById('spaceCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const stars = [];
+    const starCount = 300;
+
+    let mouse = {
+      x: canvas.width / 2,
+      y: canvas.height / 2
+    };
+    let smoothMouse = {
+      x: canvas.width / 2,
+      y: canvas.height / 2
+    };
+
+    class Star {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.radius = Math.random() * 0.9 + 0.5;
+        this.baseSpeed = Math.random() * 1.5 + 0.5;
+        this.color = `hsl(${Math.random() * 360}, 80%, 80%)`;
+
+      }
+
+      update() {
+        let dx = (smoothMouse.x - canvas.width / 2) / canvas.width;
+        let dy = (smoothMouse.y - canvas.height / 2) / canvas.height;
+
+        this.x += dx * this.baseSpeed * 6;
+        this.y += dy * this.baseSpeed * 6;
+
+        // Wrap horizontally
+        if (this.x < 0) this.x = canvas.width;
+        if (this.x > canvas.width) this.x = 0;
+
+        // Wrap vertically
+        if (this.y < 0) this.y = canvas.height;
+        if (this.y > canvas.height) this.y = 0;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < starCount; i++) {
+      stars.push(new Star());
+    }
+
+    function animateStars() {
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Smooth transition
+      smoothMouse.x += (mouse.x - smoothMouse.x) * 0.1;
+      smoothMouse.y += (mouse.y - smoothMouse.y) * 0.1;
+
+      for (let star of stars) {
+        star.update();
+        star.draw();
+      }
+
+      requestAnimationFrame(animateStars);
+    }
+
+    animateStars();
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+
+</body>
+</html>
