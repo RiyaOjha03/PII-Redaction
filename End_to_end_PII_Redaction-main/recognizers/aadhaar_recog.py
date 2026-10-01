@@ -1,0 +1,26 @@
+from presidio_analyzer import PatternRecognizer, Pattern
+aadhaar_recognizer = PatternRecognizer( supported_entity = "AADHAAR",
+                                     patterns = [Pattern(name="aadhaar_pattern", regex=r'\b\d{4}\s\d{4}\s\d{4}\b', score=0.8)],
+                                     context =  [    "Aadhaar", 
+                                                    "Aadhaar number", 
+                                                    "UIDAI number", 
+                                                    "UID number", 
+                                                    "unique identification number", 
+                                                    "12 digit ID", 
+                                                    "Aadhaar card", 
+                                                    "Aadhaar-linked",
+                                                    "Aadhaar registration", 
+                                                    "Aadhaar authentication", 
+                                                    "Aadhaar-based",
+                                                    "Aadhaar details",
+                                                    "Aadhaar issued by UIDAI",
+                                                    "Aadhaar identity",
+                                                    "biometric Aadhaar",
+                                                    "Aadhaar enrolment",
+                                                    "Aadhaar verified",
+                                                    "Aadhaar verification",
+                                                    "Aadhaar-linked account",
+                                                    "Aadhaar card number",
+                                                    "UIDAI Aadhaar number"]
+                                                
+                                   )

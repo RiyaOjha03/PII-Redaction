@@ -1,0 +1,1 @@
+storage_sender(text_data)
